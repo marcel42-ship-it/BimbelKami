@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BIMBEL KAMI - Korps Anak Millenial Indonesia</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;700;900&display=swap');
+        body { font-family: 'Inter', sans-serif; scroll-behavior: smooth; }
+        .font-heading { font-family: 'Archivo Black', sans-serif; }
+        .hero-gradient {
+            background: linear-gradient(rgba(15, 23, 42, 0.85), rgba(15, 23, 42, 0.95)), url('https://images.unsplash.com/photo-1590402444816-a118f09f130b?auto=format&fit=crop&q=80&w=2000');
+            background-size: cover;
+            background-position: center;
+        }
+        .gallery-item { transition: all 0.3s ease; }
+        .admin-only { display: none; }
+        body.is-admin .admin-only { display: flex !important; }
+        body.is-admin .admin-block { display: block !important; }
+        .form-input { 
+            @apply w-full bg-gray-50 border-2 border-gray-200 p-4 rounded-xl font-bold outline-none transition focus:border-blue-900 focus:ring-4 focus:ring-blue-100;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-slate-900 overflow-x-hidden">
+
+    <!-- Navigasi -->
+    <nav class="bg-white border-b-4 border-red-600 sticky top-0 z-50 shadow-md">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <div class="bg-blue-900 p-2 rounded-full text-yellow-400">
+                    <i class="fas fa-shield-alt fa-lg"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl md:text-2xl font-black leading-none text-blue-900 uppercase tracking-tighter">BIMBEL <span class="text-red-600">KAMI</span></h1>
+                    <p class="text-[10px] font-bold text-gray-500 tracking-widest uppercase">Kelapa Dua Depok</p>
+                </div>
+            </div>
+            <div class="flex space-x-4 text-sm font-black uppercase tracking-tight items-center">
+                <a href="#galeri" class="hidden md:block hover:text-red-600 transition">Galeri</a>
+                <a href="#daftar" class="bg-red-600 text-white px-5 py-2 rounded-full hover:bg-red-700 shadow-lg transition transform hover:scale-105 text-[10px] md:text-xs">Daftar</a>
+                <button id="loginBtn" onclick="toggleLoginModal()" class="text-gray-400 hover:text-blue-900 transition text-xs"><i class="fas fa-user-lock"></i></button>
+                <button id="logoutBtn" onclick="logoutAdmin()" class="hidden text-red-600 hover:underline transition text-xs font-bold italic">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Bagian Hero -->
+    <header class="relative hero-gradient text-white py-20 px-4 border-b-8 border-yellow-500 text-center">
+        <div class="container mx-auto relative z-10">
+            <h2 class="text-yellow-400 font-bold text-lg md:text-2xl tracking-[0.3em] uppercase mb-4">KORPS ANAK MILLENIAL INDONESIA</h2>
+            <h1 class="font-heading text-6xl md:text-9xl leading-none mb-8 italic uppercase tracking-tighter">BIMBEL <span class="text-red-600">KAMI</span></h1>
+            
+            <div class="inline-block bg-white text-blue-950 p-8 rounded-3xl shadow-2xl border-4 border-yellow-500 mb-12 transform -rotate-2">
+                <p class="text-xs font-black uppercase tracking-widest text-red-600">Durasi Pelatihan</p>
+                <p class="text-5xl md:text-7xl font-black leading-none uppercase">8 BULAN</p>
+            </div>
+
+            <p class="text-xl font-bold max-w-2xl mx-auto mb-10 text-gray-200 uppercase tracking-widest">PENDAFTARAN PELATIHAN KHUSUS 2024/2025</p>
+            <div class="flex justify-center">
+                <a href="#daftar" class="bg-red-600 hover:bg-red-700 text-white px-10 py-5 rounded-2xl font-black text-xl uppercase tracking-tighter shadow-2xl transform hover:scale-105 transition animate-pulse">
+                    Mulai Daftar Sekarang <i class="fas fa-file-signature ml-2"></i>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Formulir Pendaftaran -->
+    <section id="daftar" class="py-20 bg-slate-200 border-y-8 border-blue-950">
+        <div class="container mx-auto px-4 max-w-4xl">
+            <div class="bg-white rounded-[3rem] shadow-2xl overflow-hidden border-2 border-white">
+                <div class="bg-blue-950 p-10 text-white text-center">
+                    <i class="fas fa-id-card text-5xl mb-4 text-yellow-400"></i>
+                    <h2 class="text-3xl md:text-5xl font-black uppercase italic tracking-tighter">Form Pendaftaran</h2>
+                    <p class="text-gray-400 font-bold uppercase tracking-[0.3em] text-[10px] mt-2">Data Anda Langsung Terkirim ke WhatsApp Admin</p>
+                </div>
+                
+                <form id="registrationForm" class="p-8 md:p-12 space-y-8" onsubmit="sendToWhatsApp(event)">
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="space-y-2">
+                            <label class="font-black text-xs uppercase tracking-widest text-blue-900 ml-2">Nama Lengkap</label>
+                            <input type="text" id="reg-nama" class="form-input" placeholder="Nama Sesuai KTP" required>
+                        </div>
+                        <div class="space-y-2">
+                            <label class="font-black text-xs uppercase tracking-widest text-blue-900 ml-2">Tempat, Tanggal Lahir</label>
+                            <input type="text" id="reg-ttl" class="form-input" placeholder="Contoh: Depok, 12-05-2005" required>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                        <div class="space-y-2">
+                            <label class="font-black text-xs uppercase tracking-widest text-blue-900 ml-2">Tinggi (cm)</label>
+                            <input type="number" id="reg-tinggi" class="form-input text-center" placeholder="170" required>
+                        </div>
+                        <div class="space-y-2">
+                            <label class="font-black text-xs uppercase tracking-widest text-blue-900 ml-2">Berat (kg)</label>
+                            <input type="number" id="reg-berat" class="form-input text-center" placeholder="65" required>
+                        </div>
+                        <div class="col-span-2 space-y-2">
+                            <label class="font-black text-xs uppercase tracking-widest text-blue-900 ml-2">Nomor HP / WhatsApp</label>
+                            <input type="tel" id="reg-wa" class="form-input" placeholder="0812xxxx" required>
+                        </div>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="space-y-2">
+                            <label class="font-black text-xs uppercase tracking-widest text-blue-900 ml-2">Asal Sekolah</label>
+                            <input type="text" id="reg-sekolah" class="form-input" placeholder="SMA / SMK / Univ" required>
+                        </div>
+                        <div class="space-y-2">
+                            <label class="font-black text-xs uppercase tracking-widest text-blue-900 ml-2">Program Pelatihan</label>
+                            <select id="reg-program" class="form-input cursor-pointer">
+                                <option value="AKPOL / AKMIL">AKPOL / AKMIL</option>
+                                <option value="BINTARA (POLRI/TNI)">BINTARA (POLRI/TNI)</option>
+                                <option value="TAMTAMA">TAMTAMA</option>
+                                <option value="SIPSS">SIPSS</option>
+                                <option value="KEDINASAN">SEKOLAH KEDINASAN</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="font-black text-xs uppercase tracking-widest text-blue-900 ml-2">Alamat Domisili</label>
+                        <textarea id="reg-alamat" rows="3" class="form-input" placeholder="Tuliskan alamat lengkap..." required></textarea>
+                    </div>
+
+                    <button type="submit" class="w-full bg-red-600 text-white p-6 rounded-2xl font-black uppercase text-xl tracking-tighter shadow-2xl hover:bg-red-700 transition transform active:scale-95 flex items-center justify-center">
+                        <i class="fab fa-whatsapp mr-3 text-3xl"></i> Daftar Via WhatsApp
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Galeri Foto -->
+    <section id="galeri" class="py-20 bg-white">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-4xl font-black uppercase italic text-blue-950 mb-10 tracking-tighter border-b-4 border-yellow-500 inline-block pb-2">Galeri Kegiatan</h2>
+            
+            <div class="admin-block hidden mb-8">
+                <button onclick="document.getElementById('fileInput').click()" class="bg-blue-900 text-white px-8 py-3 rounded-xl font-black uppercase tracking-widest shadow-xl">
+                    <i class="fas fa-plus-circle mr-2"></i> Tambah Foto Pengurus
+                </button>
+                <input type="file" id="fileInput" class="hidden" accept="image/*">
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4" id="gallery-grid">
+                <!-- Foto Contoh -->
+                <div class="gallery-item relative group overflow-hidden rounded-2xl aspect-square shadow-lg">
+                    <img src="https://images.unsplash.com/photo-1594911772125-07fc7a2d8d9f?q=80&w=800" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-blue-900/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                        <button onclick="deletePhoto(this)" class="admin-only hidden bg-red-600 p-3 rounded-full text-white"><i class="fas fa-trash"></i></button>
+                    </div>
+                </div>
+                <div class="gallery-item relative group overflow-hidden rounded-2xl aspect-square shadow-lg">
+                    <img src="https://images.unsplash.com/photo-1524178232363-1fb28f74b671?q=80&w=800" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-blue-900/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                        <button onclick="deletePhoto(this)" class="admin-only hidden bg-red-600 p-3 rounded-full text-white"><i class="fas fa-trash"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="fixed inset-0 bg-blue-950/90 z-[110] hidden flex items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-white rounded-3xl p-8 w-full max-w-sm shadow-2xl text-center">
+            <h3 class="text-xl font-black text-blue-900 uppercase italic mb-6">Login Admin</h3>
+            <input type="password" id="adminPass" class="w-full bg-gray-100 p-4 rounded-xl outline-none font-black text-center tracking-widest mb-4 border-2 border-transparent focus:border-blue-900" placeholder="KODE AKSES">
+            <button onclick="checkAdminLogin()" class="w-full bg-blue-900 text-white font-black py-4 rounded-xl uppercase">Masuk Panel</button>
+            <button onclick="toggleLoginModal()" class="w-full mt-4 text-gray-400 text-xs font-bold uppercase">Batal</button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-black py-12 text-center text-white">
+        <p class="text-[10px] text-gray-500 font-bold uppercase tracking-[0.5em]">&copy; 2024 BIMBEL KAMI - DEPOK</p>
+    </footer>
+
+    <script>
+        // Gunakan Kode Ini Untuk Login Admin
+        const ADMIN_PASSWORD = "KAMI-ADMIN-2024";
+
+        // Logic Pendaftaran WhatsApp
+        function sendToWhatsApp(e) {
+            e.preventDefault();
+            const nama = document.getElementById('reg-nama').value;
+            const ttl = document.getElementById('reg-ttl').value;
+            const tinggi = document.getElementById('reg-tinggi').value;
+            const berat = document.getElementById('reg-berat').value;
+            const wa = document.getElementById('reg-wa').value;
+            const sekolah = document.getElementById('reg-sekolah').value;
+            const program = document.getElementById('reg-program').value;
+            const alamat = document.getElementById('reg-alamat').value;
+
+            const pesan = `*PENDAFTARAN BIMBEL KAMI*%0A` +
+                          `----------------------------%0A` +
+                          `👤 *Nama:* ${nama}%0A` +
+                          `📅 *TTL:* ${ttl}%0A` +
+                          `📏 *TB/BB:* ${tinggi}cm / ${berat}kg%0A` +
+                          `📱 *WA:* ${wa}%0A` +
+                          `🏫 *Sekolah:* ${sekolah}%0A` +
+                          `🎯 *Program:* ${program}%0A` +
+                          `📍 *Alamat:* ${alamat}%0A` +
+                          `----------------------------`;
+
+            // Redirect ke nomor WhatsApp Admin
+            window.open(`https://wa.me/6281291186392?text=${pesan}`, '_blank');
+        }
+
+        // Logic Panel Admin
+        function toggleLoginModal() {
+            document.getElementById('loginModal').classList.toggle('hidden');
+        }
+
+        function checkAdminLogin() {
+            const pass = document.getElementById('adminPass').value;
+            if (pass === ADMIN_PASSWORD) {
+                document.body.classList.add('is-admin');
+                document.getElementById('loginBtn').classList.add('hidden');
+                document.getElementById('logoutBtn').classList.remove('hidden');
+                toggleLoginModal();
+                alert('Akses Admin Diterima!');
+            } else {
+                alert('Kode Salah!');
+            }
+        }
+
+        function logoutAdmin() {
+            document.body.classList.remove('is-admin');
+            document.getElementById('loginBtn').classList.remove('hidden');
+            document.getElementById('logoutBtn').classList.add('hidden');
+            alert('Admin Logout.');
+        }
+
+        function deletePhoto(btn) {
+            if (confirm('Hapus foto ini?')) btn.closest('.gallery-item').remove();
+        }
+
+        document.getElementById('fileInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    const grid = document.getElementById('gallery-grid');
+                    const newItem = document.createElement('div');
+                    newItem.className = 'gallery-item relative group overflow-hidden rounded-2xl aspect-square shadow-lg border-2 border-red-600';
+                    newItem.innerHTML = `
+                        <img src="${event.target.result}" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-blue-900/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                            <button onclick="deletePhoto(this)" class="admin-only flex bg-red-600 p-3 rounded-full text-white"><i class="fas fa-trash"></i></button>
+                        </div>
+                    `;
+                    grid.prepend(newItem);
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
+</body>
+</html>
+
